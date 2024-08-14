@@ -1,9 +1,11 @@
-function MainContent() {
+const MainContent = () => {
     return (
-        <main>
-            <p>I love to visit New York, Paris, and Tokyo.</p>
+        <main style={{ padding: '20px', textAlign: 'center' }}>
+            <p style={{ fontSize: '18px', color: 'darkslategray' }}>
+                I love to visit New York, Paris, and Tokyo.
+            </p>
         </main>
     );
-}
+};
 
 export default MainContent;
