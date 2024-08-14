@@ -1,3 +1,4 @@
+// Resolved content
 const MainContent = () => {
     return (
         <main style={{ padding: '20px', textAlign: 'center' }}>
