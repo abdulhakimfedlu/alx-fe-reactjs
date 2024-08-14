@@ -1,5 +1,8 @@
 import Counter from './components/Counter';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7ef477c (Added Counter component with useState functionality)
 import UserProfile from './components/UserProfile';
 
 import Header from './components/Header';
@@ -18,11 +21,20 @@ function App() {
   return (
     <>
     (
+<<<<<<< HEAD
         <div>
             <h1>My Counter App</h1>
             <Counter /> {/* Use the Counter component */}
         </div>
     );
+=======
+    <div>
+      <h1>Welcome to the Counter App</h1>
+      <Counter />
+    </div>
+  );
+
+>>>>>>> 7ef477c (Added Counter component with useState functionality)
      (
      <div>
             <WelcomeMessage />
