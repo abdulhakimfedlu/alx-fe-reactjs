@@ -1,17 +1,16 @@
 {
   "name": "form-handling-react",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
-
-  
-}
-
+  },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "formik": "^2.2.9",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
