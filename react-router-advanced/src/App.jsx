@@ -6,6 +6,23 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import Post from './components/Post';
+import ProtectedRoute from './ProtectedRoute';
+
+function App() {
+  const isAuthenticated = false; // Replace with actual auth check
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/profile/*" element={<ProtectedRoute element={<Profile />} isAuthenticated={isAuthenticated} />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
+  );
+}
 // Add to Routes:
 <Route path="/post/:postId" element={<Post />} />
 
