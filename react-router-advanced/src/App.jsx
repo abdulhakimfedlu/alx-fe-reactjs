@@ -7,6 +7,34 @@ import Home from './components/Home';
 import Profile from './components/Profile';
 import Post from './components/Post';
 import ProtectedRoute from './ProtectedRoute';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './Home';
+import About from './About';
+import Profile from './Profile';
+import BlogPost from './BlogPost';
+import Login from './Login';
+import ProtectedRoute from './ProtectedRoute';
+
+function App() {
+  const isAuthenticated = false; // Simulate authentication status
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route
+          path="/profile/*"
+          element={<ProtectedRoute element={<Profile />} isAuthenticated={isAuthenticated} />}
+        />
+        <Route path="/blog/:id" element={<BlogPost />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
+  );
+}
+
 
 function App() {
   const isAuthenticated = false; // Replace with actual auth check
