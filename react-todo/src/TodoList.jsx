@@ -17,7 +17,7 @@ function TodoList() {
   };
 
   const toggleTodo = (id) => {
-    setTodos(todos.map(todo => 
+    setTodos(todos.map(todo =>
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
     ));
   };
@@ -30,9 +30,9 @@ function TodoList() {
     <div>
       <ul>
         {todos.map(todo => (
-          <li 
-            key={todo.id} 
-            onClick={() => toggleTodo(todo.id)} 
+          <li
+            key={todo.id}
+            onClick={() => toggleTodo(todo.id)}
             style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
           >
             {todo.text}
@@ -40,11 +40,11 @@ function TodoList() {
           </li>
         ))}
       </ul>
-      <input 
-        type="text" 
-        value={newTodo} 
-        onChange={(e) => setNewTodo(e.target.value)} 
-        placeholder="New todo" 
+      <input
+        type="text"
+        value={newTodo}
+        onChange={(e) => setNewTodo(e.target.value)}
+        placeholder="New todo"
       />
       <button onClick={addTodo}>Add Todo</button>
     </div>
