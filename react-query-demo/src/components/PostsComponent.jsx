@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query';
+import { useState } from 'react';
 
 const fetchPosts = async () => {
   const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -9,7 +10,10 @@ const fetchPosts = async () => {
 };
 
 function PostsComponent() {
-  const { data, error, isLoading, isError, refetch } = useQuery('posts', fetchPosts);
+  const [isCachedData, setIsCachedData] = useState(false);
+  const { data, error, isLoading, isError, refetch, isFetching } = useQuery('posts', fetchPosts, {
+    onSuccess: () => setIsCachedData(false), // Reset cache flag on success
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -22,7 +26,21 @@ function PostsComponent() {
   return (
     <div>
       <h1>Posts</h1>
-      <button onClick={() => refetch()}>Refetch Posts</button>
+      {isFetching ? (
+        <div>Loading new data...</div>
+      ) : isCachedData ? (
+        <div>Data loaded from cache</div>
+      ) : (
+        <div>Data fetched from API</div>
+      )}
+      <button
+        onClick={() => {
+          setIsCachedData(true);
+          refetch();
+        }}
+      >
+        Refetch Posts
+      </button>
       <ul>
         {data.map(post => (
           <li key={post.id}>{post.title}</li>
