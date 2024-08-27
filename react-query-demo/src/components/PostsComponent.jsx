@@ -1,51 +1,37 @@
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import { useState } from 'react';
+import axios from 'axios';
 
 const fetchPosts = async () => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
+  const { data } = await axios.get('https://jsonplaceholder.typicode.com/posts');
+  return data;
 };
 
 function PostsComponent() {
-  const [isCachedData, setIsCachedData] = useState(false);
-  const { data, error, isLoading, isError, refetch, isFetching } = useQuery('posts', fetchPosts, {
-    onSuccess: () => setIsCachedData(false), // Reset cache flag on success
+  const [showPosts, setShowPosts] = useState(true);
+  const { data, error, isLoading, refetch } = useQuery('posts', fetchPosts, {
+    staleTime: 5000, // Data stays fresh for 5 seconds
+    cacheTime: 10000, // Data is cached for 10 seconds
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error: {error.message}</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>An error occurred: {error.message}</div>;
 
   return (
     <div>
-      <h1>Posts</h1>
-      {isFetching ? (
-        <div>Loading new data...</div>
-      ) : isCachedData ? (
-        <div>Data loaded from cache</div>
-      ) : (
-        <div>Data fetched from API</div>
-      )}
-      <button
-        onClick={() => {
-          setIsCachedData(true);
-          refetch();
-        }}
-      >
-        Refetch Posts
+      <button onClick={() => setShowPosts(!showPosts)}>
+        {showPosts ? 'Hide' : 'Show'} Posts
       </button>
-      <ul>
-        {data.map(post => (
-          <li key={post.id}>{post.title}</li>
-        ))}
-      </ul>
+      {showPosts && (
+        <>
+          <ul>
+            {data.map((post) => (
+              <li key={post.id}>{post.title}</li>
+            ))}
+          </ul>
+          <button onClick={refetch}>Refetch Posts</button>
+        </>
+      )}
     </div>
   );
 }
