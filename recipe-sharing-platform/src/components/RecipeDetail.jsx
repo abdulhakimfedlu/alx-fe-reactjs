@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import data from '../data.json'; // Import the mock data
+import data from '../data.json';
 
 const RecipeDetail = () => {
-  const { id } = useParams(); // Get the ID from the route params
+  const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    // Find the recipe by ID
     const foundRecipe = data.find((recipe) => recipe.id === parseInt(id));
     setRecipe(foundRecipe);
   }, [id]);
 
-  // If the recipe is not found, return a loading message or an error
   if (!recipe) {
     return <div>Loading...</div>;
   }
