@@ -3,6 +3,45 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import React from 'react';
+import React, { useState } from 'react';
+import Search from './components/Search';
+import { fetchUserData } from './services/githubService';
+
+function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSearch = async (username) => {
+    setLoading(true);
+    setError(null);
+    setUser(null);
+    try {
+      const userData = await fetchUserData(username);
+      setUser(userData);
+    } catch (error) {
+      setError('Looks like we can\'t find the user');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <h1>GitHub User Search</h1>
+      <Search onSearch={handleSearch} />
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+      {user && (
+        <div>
+          <img src={user.avatar_url} alt="User avatar" />
+          <p>Name: {user.name}</p>
+          <a href={user.html_url} target="_blank" rel="noreferrer">View GitHub Profile</a>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function App() {
   return (
