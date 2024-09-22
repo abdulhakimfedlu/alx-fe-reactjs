@@ -5,23 +5,22 @@ import './App.css'
 import React from 'react';
 import React, { useState } from 'react';
 import Search from './components/Search';
+import SearchResult from './components/SearchResult';
 import { fetchUserData } from './services/githubService';
 
-
-function App() {
-  const [user, setUser] = useState(null);
+const App = () => {
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
 
-  const handleSearch = async (username) => {
+  const handleSearch = async (criteria) => {
     setLoading(true);
-    setError(null);
-    setUser(null);
+    setError('');
     try {
-      const userData = await fetchUserData(username);
-      setUser(userData);
-    } catch (error) {
-      setError('Looks like we can\'t find the user');
+      const data = await fetchUserData(criteria);
+      setUsers(data);
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -29,20 +28,12 @@ function App() {
 
   return (
     <div>
-      <h1>GitHub User Search</h1>
+      <h1 className="text-center text-2xl my-4">GitHub User Search</h1>
       <Search onSearch={handleSearch} />
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
-      {user && (
-        <div>
-          <img src={user.avatar_url} alt="User avatar" />
-          <p>Name: {user.name}</p>
-          <a href={user.html_url} target="_blank" rel="noreferrer">View GitHub Profile</a>
-        </div>
-      )}
+      <SearchResult users={users} loading={loading} error={error} />
     </div>
   );
-}
+};
 
 function App() {
   return (
