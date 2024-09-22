@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import Search from './components/Search';
 import { fetchUserData } from './services/githubService';
 
+
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
