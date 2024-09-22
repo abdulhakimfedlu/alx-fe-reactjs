@@ -1,25 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const SearchResult = ({ userData, loading, error }) => {
-  if (loading) {
-    return <p>Loading...</p>;  // Show loading state
-  }
+const Search = ({ onSearch }) => {
+  const [username, setUsername] = useState('');
 
-  if (error) {
-    return <p>{error}</p>;  // Show error message
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(username);
+  };
 
-  if (userData) {
-    return (
-      <div>
-        <img src={userData.avatar_url} alt={userData.name} width="100" />
-        <h3>{userData.name}</h3>
-        <a href={userData.html_url} target="_blank" rel="noopener noreferrer">View Profile</a>
-      </div>
-    );
-  }
-
-  return null;  // Return null if no data is available
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input 
+          type="text" 
+          value={username} 
+          onChange={(e) => setUsername(e.target.value)} 
+          placeholder="Enter GitHub username" 
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  );
 };
 
-export default SearchResult;
+export default Search;
