@@ -1,41 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { fetchUserData } from "../services/githubService";
 
-const Search = ({ onSearch }) => {
-  const [username, setUsername] = useState('');
-  const [location, setLocation] = useState('');
-  const [minRepos, setMinRepos] = useState('');
+const Search = () => {
+  const [username, setUsername] = useState("");
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  // Async function to handle search
+  const handleSearch = async (e) => {
     e.preventDefault();
-    onSearch({ username, location, minRepos });
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Await the API call
+      const result = await fetchUserData(username);
+
+      // If the API call is successful, update users state
+      setUsers(result.items || []); // 'items' if the API returns a list of users
+    } catch (err) {
+      // Handle any error that occurs during the API call
+      setError("Looks like we can't find the user.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-md">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input 
+    <div className="p-4">
+      {/* Search Form */}
+      <form onSubmit={handleSearch} className="mb-4">
+        <input
           type="text"
+          placeholder="Search GitHub users..."
+          className="border p-2 rounded w-full"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter GitHub username"
-          className="w-full p-2 border border-gray-300 rounded"
         />
-        <input 
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="Enter location"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <input 
-          type="number"
-          value={minRepos}
-          onChange={(e) => setMinRepos(e.target.value)}
-          placeholder="Minimum repositories"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">Search</button>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white mt-2 p-2 rounded"
+        >
+          Search
+        </button>
       </form>
+
+      {/* Loading State */}
+      {loading && <p>Loading...</p>}
+
+      {/* Error Message */}
+      {error && <p className="text-red-500">{error}</p>}
+
+      {/* Search Results */}
+      <div>
+        {users.length > 0 ? (
+          users.map((user) => (
+            <div key={user.id} className="border p-4 mb-2 rounded">
+              <img
+                src={user.avatar_url}
+                alt={user.login}
+                className="w-16 h-16 rounded-full"
+              />
+              <p>
+                <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+                  {user.login}
+                </a>
+              </p>
+              <p>Location: {user.location || "Unknown"}</p>
+              <p>Repos: {user.public_repos}</p>
+            </div>
+          ))
+        ) : (
+          !loading && <p>No users found.</p>
+        )}
+      </div>
     </div>
   );
 };
